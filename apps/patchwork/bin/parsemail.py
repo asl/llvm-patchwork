@@ -153,7 +153,8 @@ def find_content(project, mail):
     pullurl = None
 
     for part in mail.walk():
-        if part.get_content_maintype() != 'text':
+        maintype = part.get_content_maintype()
+        if maintype != 'text' and maintype != 'application':
             continue
 
         payload = part.get_payload(decode=True)
@@ -170,8 +171,9 @@ def find_content(project, mail):
         if subtype in ['x-patch', 'x-diff']:
             patchbuf = payload
 
-        elif subtype == 'plain':
-            c = payload
+        elif subtype == 'plain' or subtype == 'octet-stream':
+            if subtype == 'plain':
+                c = payload
 
             if not patchbuf:
                 (patchbuf, c) = parse_patch(payload)
