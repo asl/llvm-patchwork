@@ -13,6 +13,7 @@ basedir = os.path.join(
     os.path.dirname(__file__), os.path.pardir, os.path.pardir)
 sys.path.append(basedir)
 sys.path.append(os.path.join(basedir, 'apps'))
+sys.path.append(os.path.join(basedir, 'lib', 'python'))
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'apps.settings'
 import django.core.handlers.wsgi
