@@ -382,6 +382,12 @@ def parse_mail(mail):
         print "no project found"
         return 0
 
+    # Check, whether the subject contains [PATCH] or [RFC]
+    subject = clean_subject(mail.get('Subject'), [ project.linkname ], False)
+    if (not '[PATCH]' in subject) and (not '[RFC]' in subject):
+        print "wrong subject"
+        return 0
+
     msgid = mail.get('Message-Id').strip()
 
     (author, save_required) = find_author(mail)
