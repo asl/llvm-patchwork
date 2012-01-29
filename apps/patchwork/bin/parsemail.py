@@ -262,7 +262,7 @@ def split_prefixes(prefix):
 re_re = re.compile('^(re|fwd?)[:\s]\s*', re.I)
 prefix_re = re.compile('^\[([^\]]*)\]\s*(.*)$')
 
-def clean_subject(subject, drop_prefixes = None):
+def clean_subject(subject, drop_prefixes = None, drop_patch_prefix = True):
     """ Clean a Subject: header from an incoming patch.
 
     Removes Re: and Fwd: strings, as well as [PATCH]-style prefixes. By
@@ -309,7 +309,8 @@ def clean_subject(subject, drop_prefixes = None):
     else:
         drop_prefixes = [ s.lower() for s in drop_prefixes ]
 
-    drop_prefixes.append('patch')
+    if drop_patch_prefix:
+        drop_prefixes.append('patch')
 
     # remove Re:, Fwd:, etc
     subject = re_re.sub(' ', subject)
