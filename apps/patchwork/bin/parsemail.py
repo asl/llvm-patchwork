@@ -386,7 +386,7 @@ def parse_mail(mail):
 
     # Check, whether the subject contains [PATCH] or [RFC]
     subject = clean_subject(mail.get('Subject'), [ project.linkname ], False)
-    if (not '[PATCH]' in subject) and (not '[RFC]' in subject):
+    if (not '[PATCH]' in subject) and (not '[RFC]' in subject) and (not 'PATCH:' in subject):
         print "wrong subject"
         return 0
 
