@@ -264,7 +264,7 @@ def split_prefixes(prefix):
 re_re = re.compile('^(re|fwd?)[:\s]\s*', re.I)
 prefix_re = re.compile('^\[([^\]]*)\]\s*(.*)$')
 
-def clean_subject(subject, drop_prefixes = None, drop_patch_prefix = True):
+def clean_subject(subject, drop_prefixes = None):
     """ Clean a Subject: header from an incoming patch.
 
     Removes Re: and Fwd: strings, as well as [PATCH]-style prefixes. By
@@ -311,8 +311,7 @@ def clean_subject(subject, drop_prefixes = None, drop_patch_prefix = True):
     else:
         drop_prefixes = [ s.lower() for s in drop_prefixes ]
 
-    if drop_patch_prefix:
-        drop_prefixes.append('patch')
+    drop_prefixes.append('patch')
 
     # remove Re:, Fwd:, etc
     subject = re_re.sub(' ', subject)
@@ -384,10 +383,10 @@ def parse_mail(mail):
         print "no project found"
         return 0
 
-    # Check, whether the subject contains [PATCH] or [RFC]
-    subject = clean_subject(mail.get('Subject'), [ project.linkname ], False)
-    if (not '[PATCH]' in subject) and (not '[RFC]' in subject) and (not 'PATCH:' in subject):
-        print "wrong subject"
+    # Check, whether the e-mail was sent by svn mailer
+    mailer = mail.get('X-mailer', '')
+    if 'svnmailer' in mailer:
+        print 'wrong mailer'
         return 0
 
     msgid = mail.get('Message-Id').strip()
